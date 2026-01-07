@@ -2,6 +2,7 @@
 import { ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from '@/utils/toast'
+import { WS_BASE_URL } from '@/config/api'
 
 export function useQueue(
   username: Ref<string | null>,
@@ -20,7 +21,7 @@ export function useQueue(
     try {
       console.log(`[${startTime}] Sending join-queue request for player:`, playerColor.value)
 
-      const socket = new WebSocket(`ws://localhost:9000/queue-ws`)
+      const socket = new WebSocket(`${WS_BASE_URL}/queue-ws`)
 
       socket.onopen = () => {
         console.log(`[${startTime}] WebSocket connected`)

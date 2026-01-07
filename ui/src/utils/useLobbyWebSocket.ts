@@ -1,5 +1,6 @@
 // useLobbyWebSocket.ts
 import { ref, reactive, onMounted, onBeforeUnmount, type Ref, watch } from "vue";
+import { WS_BASE_URL } from '@/config/api';
 
 export interface ChatMessage {
     type: string;
@@ -75,7 +76,7 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
         if (ws.value) return
 
         ws.value = new WebSocket(
-            `ws://localhost:9000/lobby/${lobbyId}/ws?user=${encodeURIComponent(username.value)}`
+            `${WS_BASE_URL}/lobby/${lobbyId}/ws?user=${encodeURIComponent(username.value)}`
         );
 
         ws.value.onopen = () => {

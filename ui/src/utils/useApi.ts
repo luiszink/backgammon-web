@@ -1,5 +1,10 @@
 import { ref } from 'vue'
 import axios from 'axios'
+import { API_BASE_URL } from '@/config/api'
+
+const api = axios.create({
+  baseURL: API_BASE_URL
+})
 
 export function useApi() {
   const csrfToken = ref<string | null>(null)
@@ -7,19 +12,19 @@ export function useApi() {
   const username = ref<string | null>(null)
 
   async function fetchCsrfToken() {
-    const res = await axios.get('/csrf-token')
+    const res = await api.get('/csrf-token')
     csrfToken.value = res.data
     return csrfToken.value
   }
 
   async function fetchLobbyCount() {
-    const res = await axios.get('/get-lobby-count')
+    const res = await api.get('/get-lobby-count')
     openLobbyCount.value = parseInt(res.data)
     return openLobbyCount.value
   }
 
   async function fetchUsername() {
-    const res = await axios.get('/get-username')
+    const res = await api.get('/get-username')
     username.value = res.data || null
     return username.value
   }
@@ -27,7 +32,7 @@ export function useApi() {
   async function updateUsername(newName: string) {
     if (!csrfToken.value) await fetchCsrfToken()
 
-    const res = await axios.post(
+    const res = await api.post(
       '/update-username',
       new URLSearchParams({ username: newName }),
       { headers: { 'Csrf-Token': csrfToken.value } }
