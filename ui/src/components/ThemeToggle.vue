@@ -31,7 +31,7 @@ import { useTheme, type Theme } from '../utils/useTheme'
 const { currentTheme, setTheme } = useTheme()
 const isOpen = ref(false)
 
-const themes = [
+const themes: Array<{ value: Theme; label: string; icon: string }> = [
   { value: 'default', label: 'Modern', icon: 'bi-file-earmark-fill' },
   { value: 'classic-wood', label: 'Classic Wood', icon: 'bi-box-fill' },
   { value: 'dark', label: 'Dark', icon: 'bi-moon-stars-fill' },
