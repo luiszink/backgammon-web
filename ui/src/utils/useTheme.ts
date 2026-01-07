@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue'
 
-export type Theme = 'default' | 'classic-wood' | 'dark' | 'ocean' | 'desert'
+export type Theme = 'default' | 'classic-wood' | 'dark' | 'ocean' | 'desert' | 'forest'
 
 const THEME_STORAGE_KEY = 'backgammon-theme'
 
@@ -10,7 +10,7 @@ export function useTheme() {
   // Load theme from localStorage on init
   const loadTheme = () => {
     const saved = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null
-    if (saved && ['default', 'classic-wood', 'dark', 'ocean', 'desert'].includes(saved)) {
+    if (saved && ['default', 'classic-wood', 'dark', 'ocean', 'desert', 'forest'].includes(saved)) {
       currentTheme.value = saved
       applyTheme(saved)
     }
@@ -45,6 +45,6 @@ export function useTheme() {
   return {
     currentTheme,
     setTheme,
-    themes: ['default', 'classic-wood', 'dark', 'ocean', 'desert'] as const
+    themes: ['default', 'classic-wood', 'dark', 'ocean', 'desert', 'forest'] as const
   }
 }
