@@ -22,7 +22,7 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
-      '/get-lobby-count': {
+      '/matchmaking/count': {
         target: 'http://localhost:8080',
         changeOrigin: true,
       },

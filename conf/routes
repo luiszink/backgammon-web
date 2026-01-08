@@ -9,7 +9,7 @@ POST    /update-username    controllers.HomeController.updateUsername()
 GET     /get-username       controllers.HomeController.getUsername()
 
 
-GET     /get-lobby-count    controllers.HomeController.getLobbyCount()
+GET     /matchmaking/count  controllers.HomeController.getLobbyCount()
 
 GET     /                   controllers.Assets.at(path="/ui", file="index.html")
 POST    /lobby              controllers.HomeController.createLobby

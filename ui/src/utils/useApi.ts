@@ -18,7 +18,7 @@ export function useApi() {
   }
 
   async function fetchLobbyCount() {
-    const res = await api.get('/get-lobby-count')
+    const res = await api.get('/matchmaking/count')
     openLobbyCount.value = parseInt(res.data)
     return openLobbyCount.value
   }
