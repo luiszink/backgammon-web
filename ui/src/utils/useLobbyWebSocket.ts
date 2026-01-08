@@ -98,11 +98,14 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
 
             // Handle GameUpdate
             if (type === "GameUpdate") {
+                console.log("Received GameUpdate:", content);
+                console.log("Game data:", content.game);
                 gameState.value = {
                     game: content.game,
                     dice: content.dice,
                     currentPlayer: content.currentPlayer
                 };
+                console.log("Updated gameState:", gameState.value);
             }
 
             // Handle LobbyUpdate

@@ -55,6 +55,12 @@ const props = defineProps<{
   sendMove: (from: number, to: number) => void
 }>()
 
+console.log("Board component received props:", props.board);
+console.log("Fields:", props.board?.fields);
+console.log("Fields length:", props.board?.fields?.length);
+console.log("barWhite:", props.board?.barWhite);
+console.log("barBlack:", props.board?.barBlack);
+
 const windowWidth = ref(window.innerWidth);
 
 function handleResize() {
@@ -65,12 +71,22 @@ onMounted(() => window.addEventListener('resize', handleResize));
 onUnmounted(() => window.removeEventListener('resize', handleResize));
 
 
-const half = computed(() => Math.floor(props.board.fields.length / 2))
+const half = computed(() => {
+  if (!props.board?.fields || props.board.fields.length === 0) {
+    return 0;
+  }
+  return Math.floor(props.board.fields.length / 2);
+})
 
 const boardPoints = computed(() => {
   const width = windowWidth.value;
-  const fields = props.board.fields;
+  const fields = props.board?.fields || [];
   const len = fields.length;
+
+  if (len === 0) {
+    console.warn("No fields available for board");
+    return [];
+  }
 
   if (width < 768) {
     return Array.from({ length: Math.ceil(len / 2) })
@@ -81,14 +97,14 @@ const boardPoints = computed(() => {
     });
   }
 
-  const topRow = props.board.fields
+  const topRow = fields
     .slice(half.value)
     .map((field, idx) => ({
       field,
       originalIndex: half.value + idx
     }))
 
-  const bottomRow = props.board.fields
+  const bottomRow = fields
     .slice(0, half.value)
     .map((field, idx) => ({
       field,

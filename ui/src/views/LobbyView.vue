@@ -10,10 +10,17 @@
   />
     <chat-window :messages="messages" @sendMessage="sendMessage" />
     <div v-if="gameState">
-      <div id="game">
-        <Board v-if="gameState.game" :board="gameState.game" :send-move="sendMove"/>
+      <div v-if="!gameState.game">
+        <p>Waiting for game data...</p>
+        <p>Debug: {{ gameState }}</p>
+      </div>
+      <div v-else id="game">
+        <Board :board="gameState.game" :send-move="sendMove"/>
         <Dice v-if="gameState.dice" :dice="gameState.dice" />
       </div>
+    </div>
+    <div v-else>
+      <p>Waiting for game to start...</p>
     </div>
   </div>
 </div>
