@@ -25,7 +25,7 @@ export function useApi() {
 
   async function fetchUsername() {
     // Try localStorage first (for cross-domain compatibility)
-    const localUsername = localStorage.getItem('username');
+    let localUsername = localStorage.getItem('username');
     if (localUsername) {
       username.value = localUsername;
       console.log('Username loaded from localStorage:', localUsername);
@@ -39,12 +39,18 @@ export function useApi() {
       if (serverUsername) {
         username.value = serverUsername;
         localStorage.setItem('username', serverUsername);
+        return serverUsername;
       }
-      return serverUsername;
     } catch (error) {
       console.error('Failed to fetch username:', error);
-      return null;
     }
+    
+    // Generate random username if none exists
+    const randomUsername = `Player${Math.floor(Math.random() * 10000)}`;
+    username.value = randomUsername;
+    localStorage.setItem('username', randomUsername);
+    console.log('Generated random username:', randomUsername);
+    return randomUsername;
   }
 
   async function updateUsername(newName: string) {
