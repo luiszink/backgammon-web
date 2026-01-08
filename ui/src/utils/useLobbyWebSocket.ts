@@ -85,12 +85,19 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
         };
 
         ws.value.onmessage = (event) => {
+            console.log("=== WebSocket Message Received ===");
+            console.log("Raw data:", event.data);
+            
             let data: any;
             try {
                 data = JSON.parse(event.data);
-            } catch {
+            } catch (e) {
+                console.error("Failed to parse JSON:", e);
                 data = { message: event.data };
             }
+
+            console.log("Parsed data:", data);
+            console.log("Message type:", data.type);
 
             const type = data.type;
             const content = data.data;
@@ -98,14 +105,16 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
 
             // Handle GameUpdate
             if (type === "GameUpdate") {
-                console.log("Received GameUpdate:", content);
+                console.log("✅ Received GameUpdate:", content);
                 console.log("Game data:", content.game);
+                console.log("Dice:", content.dice);
+                console.log("Current player:", content.currentPlayer);
                 gameState.value = {
                     game: content.game,
                     dice: content.dice,
                     currentPlayer: content.currentPlayer
                 };
-                console.log("Updated gameState:", gameState.value);
+                console.log("✅ Updated gameState:", gameState.value);
             }
 
             // Handle LobbyUpdate
