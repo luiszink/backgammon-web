@@ -34,7 +34,10 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
-      '/lobby': 'http://localhost:8080'
+      '/lobby': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      }
     }
   }
 })
