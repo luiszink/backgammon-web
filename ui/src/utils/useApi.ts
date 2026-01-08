@@ -24,9 +24,27 @@ export function useApi() {
   }
 
   async function fetchUsername() {
-    const res = await api.get('/get-username')
-    username.value = res.data || null
-    return username.value
+    // Try localStorage first (for cross-domain compatibility)
+    const localUsername = localStorage.getItem('username');
+    if (localUsername) {
+      username.value = localUsername;
+      console.log('Username loaded from localStorage:', localUsername);
+      return localUsername;
+    }
+    
+    // Fallback to server session
+    try {
+      const res = await api.get('/get-username');
+      const serverUsername = res.data || null;
+      if (serverUsername) {
+        username.value = serverUsername;
+        localStorage.setItem('username', serverUsername);
+      }
+      return serverUsername;
+    } catch (error) {
+      console.error('Failed to fetch username:', error);
+      return null;
+    }
   }
 
   async function updateUsername(newName: string) {
@@ -39,6 +57,9 @@ export function useApi() {
     )
 
     username.value = newName
+    // Save to localStorage for cross-domain compatibility
+    localStorage.setItem('username', newName)
+    console.log('Username saved to localStorage:', newName)
     return res.data
   }
 
