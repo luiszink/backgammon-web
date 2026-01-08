@@ -173,11 +173,23 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
         };
     };
 
-    watch(username, (newName) => {
-        if (newName) connect()
+    watch(username, (newName, oldName) => {
+        console.log('👤 Username watcher triggered!');
+        console.log('  Old username:', oldName);
+        console.log('  New username:', newName);
+        if (newName) {
+            console.log('  ✅ Username is set, calling connect()');
+            connect();
+        } else {
+            console.log('  ⚠️ Username is empty, not connecting');
+        }
     }, { immediate: true })
 
+    console.log('🎮 useLobbyWebSocket initialized for lobby:', lobbyId);
+    console.log('  Initial username:', username.value);
+
     onBeforeUnmount(() => {
+        console.log('🧹 Cleaning up WebSocket connection');
         ws.value?.close();
     });
 

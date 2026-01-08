@@ -48,7 +48,9 @@ const {
 
 onMounted(async () => {
   console.log('Lobby ID:', lobbyId)
-  fetchUsername()
+  console.log('Username before fetch:', username.value)
+  await fetchUsername()
+  console.log('Username after fetch:', username.value)
 })
 
 // Call composable
