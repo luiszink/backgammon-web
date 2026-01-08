@@ -2,7 +2,7 @@
 import { ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from '@/utils/toast'
-import { WS_BASE_URL } from '@/config/api'
+import { API_BASE_URL, WS_BASE_URL } from '@/config/api'
 
 export function useQueue(
   username: Ref<string | null>,
@@ -79,18 +79,22 @@ export function useQueue(
     if (scope.value === 'Public') {
       joinQueue()
     } else {
-      const response = await fetch('/lobby', {
+      const response = await fetch(`${API_BASE_URL}/lobby`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'Csrf-Token': csrfToken.value ?? ''
         },
-        body: formData
+        body: JSON.stringify({
+          player: playerColor.value,
+          boardSize: boardSize.value,
+          scope: scope.value
+        })
       })
 
-      if (response.redirected) {
-        const url = new URL(response.url)
-        const lobbyId = url.pathname.split('/').pop()
+      if (response.ok) {
+        const data = await response.json()
+        const lobbyId = data.lobbyId
         router.push(`/lobby/${lobbyId}`)
       } else {
         showToast(await response.text(), 'danger')
