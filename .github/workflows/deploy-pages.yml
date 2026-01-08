@@ -35,6 +35,8 @@ jobs:
       - name: Build project
         working-directory: ui
         run: npm run build
+        env:
+          VITE_MAINTENANCE_MODE: ${{ vars.VITE_MAINTENANCE_MODE || 'false' }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
