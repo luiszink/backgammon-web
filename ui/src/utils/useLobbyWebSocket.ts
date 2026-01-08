@@ -72,14 +72,26 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
     }
 
     const connect = () => {
-        if (!username.value) return 
-        if (ws.value) return
+        console.log("🔌 Attempting to connect WebSocket...");
+        console.log("Username:", username.value);
+        console.log("Lobby ID:", lobbyId);
+        
+        if (!username.value) {
+            console.warn("❌ Cannot connect: No username");
+            return;
+        }
+        if (ws.value) {
+            console.warn("⚠️ WebSocket already connected");
+            return;
+        }
 
-        ws.value = new WebSocket(
-            `${WS_BASE_URL}/lobby/${lobbyId}/ws?user=${encodeURIComponent(username.value)}`
-        );
+        const wsUrl = `${WS_BASE_URL}/lobby/${lobbyId}/ws?user=${encodeURIComponent(username.value)}`;
+        console.log("🔗 Connecting to:", wsUrl);
+
+        ws.value = new WebSocket(wsUrl);
 
         ws.value.onopen = () => {
+            console.log("✅ WebSocket CONNECTED!");
             connected.value = true;
             messages.push({ type: "system", text: "Connected to lobby!" });
         };
@@ -150,7 +162,12 @@ export function useLobbyWebSocket(lobbyId: string, username: Ref<string | null>)
             }
         };
 
+        ws.value.onerror = (error) => {
+            console.error("❌ WebSocket ERROR:", error);
+        };
+
         ws.value.onclose = () => {
+            console.log("🔌 WebSocket CLOSED");
             connected.value = false;
             messages.push({ type: "system", text: "WebSocket closed." });
         };
